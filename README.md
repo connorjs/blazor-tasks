@@ -1,2 +1,23 @@
-# blazor-tasks
+<div align="center">
+
+# ![@connorjs/blazor-tasks](.github/assets/social-media-preview.png)
+
 My Blazor sample application
+
+</div>
+
+## Built with
+
+[![Blazor][badge-blazor]](https://dotnet.microsoft.com/en-us/apps/aspnet/web-apps/blazor)
+[![CSharpier][badge-csharpier]](https://csharpier.com/)
+[![Gitmoji][badge-gitmoji]](https://gitmoji.dev)
+[![GitHub][badge-github]](https://github.com/home)
+[![OpenAI][badge-openai]](https://openai.com/)
+[![Rider][badge-rider]](https://www.jetbrains.com/rider/)
+
+[badge-blazor]: https://img.shields.io/badge/Blazor-512bd4?logo=blazor
+[badge-csharpier]: https://img.shields.io/badge/CSharpier-0d2b3e?logo=data:image/svg+xml;base64,PHN2ZyBpZD0iTGF5ZXJfMSIgZGF0YS1uYW1lPSJMYXllciAxIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2MDcuMTMgNjA3LjEzIj48ZGVmcz48c3R5bGU+LmNscy0xe2ZpbGw6IzMyNTY2Yzt9LmNscy0ye2ZpbGw6I2Q4ZDhkODt9LmNscy0ze2ZpbGw6Izc0OGU5ZTt9LmNscy00e2ZpbGw6IzA5MmIzZTt9PC9zdHlsZT48L2RlZnM+PHBvbHlnb24gY2xhc3M9ImNscy0xIiBwb2ludHM9IjU1LjAzIDQ0Ny4wNiA1NS4wMyAxNjAuMDcgMzAzLjU2IDE2LjU4IDU1Mi4xIDE2MC4wNyA1NTIuMSA0NDcuMDYgMzAzLjU2IDU5MC41NSA1NS4wMyA0NDcuMDYiLz48cG9seWxpbmUgY2xhc3M9ImNscy0yIiBwb2ludHM9IjQ0OC4wNiAzODYuOCAzMDMuODkgNDcwLjA0IDE1OS43MiAzODYuOCAxNTkuNzIgMjIwLjMzIDMwMy44OSAxMzcuMDkgNDQ3LjY3IDIyMC4xIDQ1MC4zNyAxNjYuNzcgMzAzLjg5IDgyLjIgMTEyLjE4IDE5Mi44OCAxMTIuMTggNDE0LjI1IDMwMy44OSA1MjQuOTMgNDQ2Ljg0IDQ0Mi40Ii8+PHBvbHlnb24gY2xhc3M9ImNscy0zIiBwb2ludHM9IjM5OS43IDI4NS4zOSAzNzMuMDUgMjg1LjM5IDM3Ni43NCAyNjEuMDEgNDAzLjM5IDI2MS4wMSAzOTkuNyAyODUuMzkiLz48cGF0aCBjbGFzcz0iY2xzLTQiIGQ9Ik0zMjMsMzMxLjY4bC01LjQ2LDM5aC0yNC4xbDUuNDYtMzlIMjc3LjI1bC01LjQ2LDM5aC0yNC4ybDUuNTctMzlIMjMyLjkybDMuMzItMjMuNTZoMjAuMjRsMy0yMS43M0gyMzkuMzRsMy4yMS0yMy41NmgyMC4yNGw1LjM2LTM4LjM0aDI1LjU5bC01LjM1LDM4LjM0aDE4Ljc0bDUuMzUtMzguMzRoMjUuNmwtNS4zNiwzOC4zNGgyMi42TDM1MiwyODYuMzlIMzI5LjRsLTMuMSwyMS43M2gyMi41OWwtMy4zMiwyMy41NlptLTE3LjY3LTQ1LjI5SDI4My41N2wtMywyMS43M0gzMDIuMloiLz48cG9seWdvbiBjbGFzcz0iY2xzLTMiIHBvaW50cz0iMzY1LjE0IDMzNy42OSAzOTEuNiAzMzcuNjkgMzk4LjQxIDI5My45OCAzNzEuNzUgMjkzLjk4IDM2NS4xNCAzMzcuNjkiLz48cG9seWdvbiBjbGFzcz0iY2xzLTMiIHBvaW50cz0iNDY2LjQ0IDI3OC4wMiA1MTUuMjkgMjc4LjAyIDUxMi41MiAyOTcuNTggNDg3LjUgMjk3LjU4IDQ4MS44OCAzMzcuNjYgNDU3LjYyIDMzNy42NiA0NjYuNDQgMjc4LjAyIi8+PHBvbHlnb24gY2xhc3M9ImNscy0zIiBwb2ludHM9IjQ2MC42IDI3Ny4zMyA0MDYuODUgMjc3LjMzIDM5Ny43MiAzMzcuNjkgNDUxLjQ3IDMzNy42OSA0NTQuNzggMzE1LjgzIDQyNS41NSAzMTUuODMgNDI1LjUxIDMxNS44MyA0MjYuNzcgMzA3LjUxIDQzMC4wNyAyODcuNjggNDQ3LjIzIDI4Ny42OCA0NDUuMjggMzAxLjk3IDQzMy43MyAzMDEuOTcgNDMyLjg1IDMwNy40MSA0NTYuMDEgMzA3LjUxIDQ2MC42IDI3Ny4zMyIvPjwvc3ZnPg==
+[badge-github]: https://img.shields.io/badge/GitHub-181717?logo=github
+[badge-gitmoji]: https://img.shields.io/badge/😜_gitmoji-ffdd67
+[badge-openai]: https://img.shields.io/badge/OpenAI-000?logo=openai
+[badge-rider]: https://img.shields.io/badge/JetBrains_Rider-FF0A67?logo=rider

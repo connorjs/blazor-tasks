@@ -1,0 +1,17 @@
+<Solution>
+	<Folder Name="/Solution items/">
+		<File Path=".csharpierignore" />
+		<File Path=".editorconfig" />
+		<File Path=".gitignore" />
+		<File Path="ci-build.ps1" />
+		<File Path="global.json" />
+		<File Path="README.md" />
+		<File Path=".globalconfig" />
+	</Folder>
+	<Folder Name="/Solution items/.config/">
+		<File Path=".config/dotnet-tools.json" />
+	</Folder>
+	<Folder Name="/Solution items/.github/">
+		<File Path=".github/workflows/pipeline.yaml" />
+	</Folder>
+</Solution>

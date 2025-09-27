@@ -1,0 +1,35 @@
+name: Pipeline
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  CiBuild:
+    name: CI Build
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+
+    steps:
+      - name: Checkout self
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0 # Full depth (not shallow) for GitVersion
+
+      - name: Use .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          dotnet-quality: preview
+          global-json-file: global.json
+
+      - name: Restore
+        run: |
+          dotnet tool restore
+
+      - name: Format
+        run: dotnet csharpier check .

@@ -1,0 +1,24 @@
+## --- Solution ---
+
+artifacts/
+
+## --- IDEs ---
+# Please commit IDE configuration to the repository when it benefits the team (no user-specific state or preferences).
+# Configure the ignore rules here to centralize all configuration.
+
+## --- Rider ---
+# We want to allow list specific files when opening the solution in Rider (not directory-based).
+
+# 1) Ignore everything by default.
+# This intentionally ignores any `.idea` files that get created when opening in directory mode.
+.idea/*
+
+# 2) Allow the solution directory itself, but ignore all content by default.
+!.idea/.idea.*
+.idea/.idea.*/.idea/*
+
+# 3) Allow specific files.
+!.idea/.idea.*/.idea/CSharpierPlugin.xml
+
+#4) Ignore other JetBrains-related files
+*.user
