@@ -1,5 +1,8 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.Threading.Tasks;
+using Connorjs.BlazorTasks.WebApp;
+using Connorjs.BlazorTasks.WebApp.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -8,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 // -- Builder --
@@ -44,7 +48,19 @@ builder.Services.AddOutputCache(o =>
 {
 	o.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(10)));
 });
-builder.Services.AddOpenApi("openapi");
+var openApiConfig = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
+builder.Services.AddOpenApi(
+	openApiConfig.DocumentName,
+	o =>
+		o.AddDocumentTransformer(
+				(document, _, _) =>
+				{
+					document.Info = openApiConfig.Info;
+					return Task.CompletedTask;
+				}
+			)
+			.AddScalarTransformers()
+);
 
 // -- Validation --
 builder.Services.AddValidation();
@@ -71,8 +87,11 @@ app.UseExceptionHandler(errorApp =>
 app.UseHttpLogging();
 
 // -- Endpoints --
-app.MapGet("/hi", ([FromQuery] [MinLength(3)] string? name) => Hello(name));
-app.MapGet("/hi/{name}", Hello);
+const string tag = "HelloWorld";
+app.MapGet("/hi", ([FromQuery] [MinLength(3)] string? name) => Hello(name))
+	.Experimental()
+	.WithTags(tag);
+app.MapGet("/hi/{name}", (string name) => Hello(name)).Experimental().WithTags(tag);
 
 // -- Open API --
 if (app.Environment.IsDevelopment())
@@ -80,7 +99,9 @@ if (app.Environment.IsDevelopment())
 	app.MapOpenApi().CacheOutput();
 	app.MapScalarApiReference(
 		"/docs",
-		o => o.AddDocument("openapi", "Blazor Tasks BFF | @connorjs").WithDarkMode(false)
+		o =>
+			o.AddDocument(openApiConfig.DocumentName, "Blazor Tasks BFF | @connorjs")
+				.WithDarkMode(false)
 	);
 }
 
