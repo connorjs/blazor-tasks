@@ -4,8 +4,9 @@
 		"WebApp": {
 			"commandName": "Project",
 			"dotnetRunMessages": true,
-			"launchBrowser": false,
-			"applicationUrl": "https://localhost:7003",
+			"launchBrowser": true,
+			"launchUrl":  "https://localhost:7003/hi/there",
+			"applicationUrl": "https://localhost:7003/",
 			"environmentVariables": {
 				"DOTNET_ENVIRONMENT": "Development"
 			}

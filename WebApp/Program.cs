@@ -1,7 +1,11 @@
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.HttpLogging;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -31,7 +35,11 @@ builder.Services.AddHttpLogging(o =>
 		| HttpLoggingFields.ResponseStatusCode;
 	o.RequestHeaders.Add("User-Agent");
 	o.ResponseHeaders.Add("Content-Type");
+	o.CombineLogs = true;
 });
+
+// --- Validation ---
+builder.Services.AddValidation();
 
 // -- Build --
 var app = builder.Build();
@@ -55,7 +63,11 @@ app.UseExceptionHandler(errorApp =>
 app.UseHttpLogging();
 
 // -- Endpoints --
-app.MapGet("/", () => "Hello, world!");
+app.MapGet("/hi", ([FromQuery] [MinLength(3)] string? name) => Hello(name));
+app.MapGet("/hi/{name}", Hello);
 
 // -- Run --
 await app.RunAsync();
+return;
+
+string Hello(string? name) => $"Hello, {name ?? "world"}!";
