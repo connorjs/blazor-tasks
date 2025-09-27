@@ -1,15 +1,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Scalar.AspNetCore;
 
 // -- Builder --
 var builder = WebApplication.CreateBuilder(args);
@@ -79,6 +78,10 @@ app.MapGet("/hi/{name}", Hello);
 if (app.Environment.IsDevelopment())
 {
 	app.MapOpenApi().CacheOutput();
+	app.MapScalarApiReference(
+		"/docs",
+		o => o.AddDocument("openapi", "Blazor Tasks BFF | @connorjs").WithDarkMode(false)
+	);
 }
 
 // -- Run --
