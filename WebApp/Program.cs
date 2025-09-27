@@ -1,23 +1,26 @@
-using System.Collections.Generic;
-using System.Diagnostics;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 // -- Builder --
 var builder = WebApplication.CreateBuilder(args);
 
 // -- Logging --
-// Configure minimal logging (see `appsettings` for configuration).
+// Console picks up JSON + options from appsettings.* (12-Factor)
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
-if (builder.Environment.IsDevelopment())
+builder.Logging.Configure(o =>
 {
-	builder.Logging.AddDebug();
-}
+	o.ActivityTrackingOptions =
+		ActivityTrackingOptions.SpanId
+		| ActivityTrackingOptions.TraceId
+		| ActivityTrackingOptions.ParentId
+		| ActivityTrackingOptions.Tags
+		| ActivityTrackingOptions.Baggage;
+});
 builder.Services.AddHttpLogging(o =>
 {
 	o.LoggingFields =
@@ -30,40 +33,28 @@ builder.Services.AddHttpLogging(o =>
 		| HttpLoggingFields.ResponseStatusCode;
 	o.RequestHeaders.Add("User-Agent");
 	o.ResponseHeaders.Add("Content-Type");
-	// Don't enable body logging in prod.
 });
 
 // -- Build --
 var app = builder.Build();
 
-// --- Logging---
-var logger = app.Services.GetRequiredService<ILogger<Program>>();
-app.UseHttpLogging();
-app.Use(
-	async (ctx, next) =>
-	{
-		var traceId = Activity.Current?.Id ?? ctx.TraceIdentifier;
-		using (logger.BeginScope(new Dictionary<string, object?> { ["TraceId"] = traceId }))
-		{
-			await next();
-		}
-	}
-);
-
-// --- Exception filter ---
+// --- Exception handling ---
+// Run first (early) in middleware pipeline to catch all exceptions
 app.UseExceptionHandler(errorApp =>
 {
 	errorApp.Run(async ctx =>
 	{
-		var ex = ctx
-			.Features.Get<Microsoft.AspNetCore.Diagnostics.IExceptionHandlerFeature>()
-			?.Error;
-		logger.LogError(ex, "Unhandled exception");
+		var logger = ctx.RequestServices.GetRequiredService<ILogger<Program>>();
+		logger.LogError(ctx.Features.Get<IExceptionHandlerFeature>()?.Error, "Unhandled exception");
+
 		ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
 		ctx.Response.ContentType = "application/problem+json";
 		await Results.Problem(statusCode: 500, title: "Unexpected error").ExecuteAsync(ctx);
 	});
 });
+
+// --- Logging ---
+app.UseHttpLogging();
 
 // -- Endpoints --
 app.MapGet("/", () => "Hello, world!");
