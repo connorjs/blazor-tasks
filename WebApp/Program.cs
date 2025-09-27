@@ -1,112 +1,36 @@
 using System;
 using System.ComponentModel.DataAnnotations;
-using System.Threading.Tasks;
-using Connorjs.BlazorTasks.WebApp;
-using Connorjs.BlazorTasks.WebApp.Configuration;
+using Connorjs.BlazorTasks.WebApp.Main;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
-// -- Builder --
 var builder = WebApplication.CreateBuilder(args);
 
-// -- Logging --
-// appsettings.* defines logging configuration (12-Factor)
-builder.Logging.ClearProviders();
-builder.Logging.AddConsole();
-builder.Logging.Configure(o =>
-{
-	o.ActivityTrackingOptions =
-		ActivityTrackingOptions.SpanId
-		| ActivityTrackingOptions.TraceId
-		| ActivityTrackingOptions.ParentId
-		| ActivityTrackingOptions.Tags
-		| ActivityTrackingOptions.Baggage;
-});
-builder.Services.AddHttpLogging(o =>
-{
-	o.LoggingFields =
-		HttpLoggingFields.Duration
-		| HttpLoggingFields.RequestPath
-		| HttpLoggingFields.RequestProtocol
-		| HttpLoggingFields.RequestMethod
-		| HttpLoggingFields.ResponseStatusCode;
-	o.RequestHeaders.Add("User-Agent");
-	o.ResponseHeaders.Add("Content-Type");
-	o.CombineLogs = true;
-});
+builder
+	.Services.AddOutputCache(o =>
+		o.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(10)))
+	)
+	.AddValidation();
 
-// -- Open API --
-builder.Services.AddOutputCache(o =>
-{
-	o.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(10)));
-});
-var openApiConfig = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
-builder.Services.AddOpenApi(
-	openApiConfig.DocumentName,
-	o =>
-		o.AddDocumentTransformer(
-				(document, _, _) =>
-				{
-					document.Info = openApiConfig.Info;
-					return Task.CompletedTask;
-				}
-			)
-			.AddScalarTransformers()
-);
+var app = builder.AddMyLogging().AddMyOpenApi().Build();
 
-// -- Validation --
-builder.Services.AddValidation();
+// Middleware chain
+// - Run exception handler first (early) in middleware pipeline to catch all exceptions
+app.UseMyExceptionHandler().UseMyLogging();
 
-// -- Build --
-var app = builder.Build();
-
-// -- Exception handling --
-// Run first (early) in middleware pipeline to catch all exceptions
-app.UseExceptionHandler(errorApp =>
-{
-	errorApp.Run(async ctx =>
-	{
-		var logger = ctx.RequestServices.GetRequiredService<ILogger<Program>>();
-		logger.LogError(ctx.Features.Get<IExceptionHandlerFeature>()?.Error, "Unhandled exception");
-
-		ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
-		ctx.Response.ContentType = "application/problem+json";
-		await Results.Problem(statusCode: 500, title: "Unexpected error").ExecuteAsync(ctx);
-	});
-});
-
-// -- Logging --
-app.UseHttpLogging();
-
-// -- Endpoints --
+// Endpoints intentionally kept in Program.cs (will switch to Fast Endpoints)
 const string tag = "HelloWorld";
 app.MapGet("/hi", ([FromQuery] [MinLength(3)] string? name) => Hello(name))
 	.Experimental()
 	.WithTags(tag);
-app.MapGet("/hi/{name}", (string name) => Hello(name)).Experimental().WithTags(tag);
+app.MapGet("/hi/{name}", Hello).Experimental().WithTags(tag);
 
-// -- Open API --
-if (app.Environment.IsDevelopment())
-{
-	app.MapOpenApi().CacheOutput();
-	app.MapScalarApiReference(
-		"/docs",
-		o =>
-			o.AddDocument(openApiConfig.DocumentName, "Blazor Tasks BFF | @connorjs")
-				.WithDarkMode(false)
-	);
-}
-
-// -- Run --
-await app.RunAsync();
+await app.UseMyOpenApi().RunAsync();
 return;
 
 string Hello(string? name) => $"Hello, {name ?? "world"}!";

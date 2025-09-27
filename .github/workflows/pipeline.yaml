@@ -30,6 +30,10 @@ jobs:
       - name: Restore
         run: |
           dotnet tool restore
+          dotnet restore
 
       - name: Format
         run: dotnet csharpier check .
+
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
