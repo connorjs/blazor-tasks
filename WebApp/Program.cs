@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Components;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.HttpLogging;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
 // -- Builder --
@@ -38,13 +40,20 @@ builder.Services.AddHttpLogging(o =>
 	o.CombineLogs = true;
 });
 
-// --- Validation ---
+// -- Open API --
+builder.Services.AddOutputCache(o =>
+{
+	o.AddBasePolicy(policy => policy.Expire(TimeSpan.FromMinutes(10)));
+});
+builder.Services.AddOpenApi("openapi");
+
+// -- Validation --
 builder.Services.AddValidation();
 
 // -- Build --
 var app = builder.Build();
 
-// --- Exception handling ---
+// -- Exception handling --
 // Run first (early) in middleware pipeline to catch all exceptions
 app.UseExceptionHandler(errorApp =>
 {
@@ -59,12 +68,18 @@ app.UseExceptionHandler(errorApp =>
 	});
 });
 
-// --- Logging ---
+// -- Logging --
 app.UseHttpLogging();
 
 // -- Endpoints --
 app.MapGet("/hi", ([FromQuery] [MinLength(3)] string? name) => Hello(name));
 app.MapGet("/hi/{name}", Hello);
+
+// -- Open API --
+if (app.Environment.IsDevelopment())
+{
+	app.MapOpenApi().CacheOutput();
+}
 
 // -- Run --
 await app.RunAsync();

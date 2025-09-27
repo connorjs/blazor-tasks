@@ -5,7 +5,7 @@
 			"commandName": "Project",
 			"dotnetRunMessages": true,
 			"launchBrowser": true,
-			"launchUrl":  "https://localhost:7003/hi/there",
+			"launchUrl":  "https://localhost:7003/openapi/openapi.json",
 			"applicationUrl": "https://localhost:7003/",
 			"environmentVariables": {
 				"DOTNET_ENVIRONMENT": "Development"
