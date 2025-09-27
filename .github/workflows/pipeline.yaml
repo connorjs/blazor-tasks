@@ -24,6 +24,7 @@ jobs:
       - name: Use .NET
         uses: actions/setup-dotnet@v5
         with:
+          dotnet-quality: preview
           global-json-file: global.json
 
       - name: Restore
