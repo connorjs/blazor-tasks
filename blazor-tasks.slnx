@@ -1,5 +1,5 @@
 <Solution>
-	<Folder Name="/Solution items/">
+	<Folder Name="\Solution items\">
 		<File Path=".csharpierignore" />
 		<File Path=".editorconfig" />
 		<File Path=".gitignore" />
@@ -10,11 +10,11 @@
 		<File Path="README.md" />
 		<File Path=".globalconfig" />
 	</Folder>
-	<Folder Name="/Solution items/.config/">
-		<File Path=".config/dotnet-tools.json" />
+	<Folder Name="\Solution items\.config\">
+		<File Path=".configdotnet-tools.json" />
 	</Folder>
-	<Folder Name="/Solution items/.github/">
-		<File Path=".github/workflows/pipeline.yaml" />
+	<Folder Name="\Solution items\.github\">
+		<File Path=".github\workflows\pipeline.yaml" />
 	</Folder>
-	<Project Path="Api/Api.csproj" />
+	<Project Path="WebApp\WebApp.csproj" />
 </Solution>
