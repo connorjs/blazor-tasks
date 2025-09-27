@@ -1,0 +1,11 @@
+<Project>
+	<PropertyGroup>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageVersion Include="AwesomeAssertions" Version="9.2.0" />
+	</ItemGroup>
+	<ItemGroup>
+		<GlobalPackageReference Include="SonarAnalyzer.CSharp" Version="10.15.0.120848" />
+	</ItemGroup>
+</Project>
