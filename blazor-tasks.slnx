@@ -15,4 +15,5 @@
   <Folder Name="/Solution items/.github/">
     <File Path=".github/workflows/pipeline.yaml" />
   </Folder>
+  <Project Path="Api/Api.csproj" />
 </Solution>
