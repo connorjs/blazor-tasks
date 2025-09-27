@@ -18,6 +18,7 @@ artifacts/
 .idea/.idea.*/.idea/*
 
 # 3) Allow specific files.
+!.idea/.idea.*/.idea/inspectionProfiles
 !.idea/.idea.*/.idea/CSharpierPlugin.xml
 
 #4) Ignore other JetBrains-related files
