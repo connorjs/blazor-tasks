@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 var builder = WebApplication.CreateBuilder(args);
 
 // -- Logging --
-// Console picks up JSON + options from appsettings.* (12-Factor)
+// appsettings.* defines logging configuration (12-Factor)
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
 builder.Logging.Configure(o =>
@@ -28,8 +28,6 @@ builder.Services.AddHttpLogging(o =>
 		| HttpLoggingFields.RequestPath
 		| HttpLoggingFields.RequestProtocol
 		| HttpLoggingFields.RequestMethod
-		| HttpLoggingFields.RequestHeaders
-		| HttpLoggingFields.ResponseHeaders
 		| HttpLoggingFields.ResponseStatusCode;
 	o.RequestHeaders.Add("User-Agent");
 	o.ResponseHeaders.Add("Content-Type");

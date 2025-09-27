@@ -1,7 +1,7 @@
 <Project>
 	<PropertyGroup>
-		<AssemblyName>Connorjs.BlazorTasks.$(MSBuildProjectName)</AssemblyName>
-		<RootNamespace>Connorjs.BlazorTasks.$(MSBuildProjectName)</RootNamespace>
+		<!--<AssemblyName>Connorjs.BlazorTasks.$(MSBuildProjectName)</AssemblyName>
+		<RootNamespace>Connorjs.BlazorTasks.$(MSBuildProjectName)</RootNamespace>-->
 		<TargetFramework>net10.0</TargetFramework>
 		<SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 		<UseArtifactsOutput>true</UseArtifactsOutput>
