@@ -1,0 +1,5 @@
+# Force LF in repo and on checkout for all text files
+* text eol=lf
+
+# Treat these as binary (no EOL conversion)
+*.png binary

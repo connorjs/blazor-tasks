@@ -1,6 +1,10 @@
 <Solution>
-    <Folder Name="/Solution items/">
-        <File Path=".gitignore" />
-        <File Path="README.md" />
-    </Folder>
+	<Folder Name="/Solution items/">
+		<File Path=".editorconfig" />
+		<File Path=".gitignore" />
+		<File Path="README.md" />
+	</Folder>
+	<Folder Name="/Solution items/.config/">
+		<File Path=".config/dotnet-tools.json" />
+	</Folder>
 </Solution>
