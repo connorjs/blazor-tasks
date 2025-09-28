@@ -7,4 +7,8 @@ param(
 )
 
 dotnet tool restore
+dotnet restore
+
 if ($configuration -eq "Release") { dotnet csharpier check . } else { dotnet csharpier format . }
+
+dotnet build --configuration $configuration --no-restore
