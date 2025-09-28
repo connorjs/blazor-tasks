@@ -16,6 +16,7 @@ dotnet_diagnostic.IDE0007.severity = error
 dotnet_diagnostic.IDE0008.severity = none
 
 ## Allow expression and block bodies for local functions
+dotnet_diagnostic.IDE0022.severity = none
 dotnet_diagnostic.IDE0061.severity = none
 
 ## Use file-scoped namespaces

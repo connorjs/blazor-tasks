@@ -16,14 +16,14 @@ internal static class OpenApiExtensions
 	internal static T AddMyOpenApi<T>(this T builder)
 		where T : IHostApplicationBuilder
 	{
-		var openApiConfig = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
+		var config = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
 		builder.Services.AddOpenApi(
-			openApiConfig.DocumentName,
+			config.DocumentName,
 			o =>
 				o.AddDocumentTransformer(
 						(document, _, _) =>
 						{
-							document.Info = openApiConfig.Info;
+							document.Info = config.Info;
 							return Task.CompletedTask;
 						}
 					)
@@ -34,7 +34,6 @@ internal static class OpenApiExtensions
 
 	internal static WebApplication UseMyOpenApi(this WebApplication app)
 	{
-		// ReSharper disable once InvertIf -- I find this if more readable given same return
 		if (app.Environment.IsDevelopment())
 		{
 			var openApiConfig = app.Configuration.GetRequired<OpenApiConfig>("OpenApi");
