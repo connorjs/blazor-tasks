@@ -2,11 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using Connorjs.BlazorTasks.WebApp.Main;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -33,4 +31,4 @@ app.MapGet("/hi/{name}", Hello).Experimental().WithTags(tag);
 await app.UseMyOpenApi().RunAsync();
 return;
 
-string Hello(string? name) => $"Hello, {name ?? "world"}!";
+static string Hello(string? name) => $"Hello, {name ?? "world"}!";

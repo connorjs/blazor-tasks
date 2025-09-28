@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Http;
@@ -6,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Connorjs.BlazorTasks.WebApp.Main;
 
-internal static class ExceptionHandlerExtensions
+internal static partial class ExceptionHandlerExtensions
 {
 	internal static WebApplication UseMyExceptionHandler(this WebApplication app)
 	{
@@ -14,16 +15,19 @@ internal static class ExceptionHandlerExtensions
 			errorApp.Run(async ctx =>
 			{
 				var logger = ctx.RequestServices.GetRequiredService<ILogger<Program>>();
-				logger.LogError(
-					ctx.Features.Get<IExceptionHandlerFeature>()?.Error,
-					"Unhandled exception"
-				);
+				logger.LogUnexpectedError(ctx.Features.Get<IExceptionHandlerFeature>()?.Error);
 
-				ctx.Response.StatusCode = StatusCodes.Status500InternalServerError;
-				ctx.Response.ContentType = "application/problem+json";
-				await Results.Problem(statusCode: 500, title: "Unexpected error").ExecuteAsync(ctx);
+				await Results
+					.Problem(
+						statusCode: StatusCodes.Status500InternalServerError,
+						title: "Unexpected error"
+					)
+					.ExecuteAsync(ctx);
 			})
 		);
 		return app;
 	}
+
+	[LoggerMessage(EventId = 5000, Level = LogLevel.Error, Message = "Unhandled exception")]
+	public static partial void LogUnexpectedError(this ILogger logger, Exception? exception);
 }
