@@ -11,7 +11,11 @@ namespace Connorjs.BlazorTasks.WebApp.Main;
 internal static class OutputCacheExtensions
 {
 	[UsedImplicitly]
-	private sealed record OutputCacheConfig(bool Enabled, OutputCachePolicyConfig BasePolicy);
+	private sealed record OutputCacheConfig(
+		bool Enabled,
+		OutputCachePolicyConfig? BasePolicy = null,
+		IDictionary<string, OutputCachePolicyConfig>? Policies = null
+	);
 
 	[UsedImplicitly]
 	private sealed record OutputCachePolicyConfig(int ExpireSeconds);
@@ -24,11 +28,17 @@ internal static class OutputCacheExtensions
 		{
 			builder.Services.AddOutputCache(o =>
 			{
-				o.AddBasePolicy(FromConfig(config.BasePolicy));
-				// foreach (var policy in config.Policies)
-				// {
-				// 	o.AddPolicy(policy.Key, FromConfig(policy.Value));
-				// }
+				if (config.BasePolicy is not null)
+				{
+					o.AddBasePolicy(FromConfig(config.BasePolicy));
+				}
+				if (config.Policies is not null)
+				{
+					foreach (var policy in config.Policies)
+					{
+						o.AddPolicy(policy.Key, FromConfig(policy.Value));
+					}
+				}
 			});
 		}
 		return builder;
