@@ -9,7 +9,6 @@ internal sealed class SayHello : Endpoint<HelloRequest, HelloResponse>
 	public override void Configure()
 	{
 		Get("/hi");
-		Get("/hi/{name}");
 		AllowAnonymous();
 	}
 
@@ -23,6 +22,7 @@ internal sealed class SayHello : Endpoint<HelloRequest, HelloResponse>
 public sealed record HelloRequest
 {
 	/// <summary>The name to greet.</summary>
+	[QueryParam]
 	public string? Name { get; init; }
 }
 

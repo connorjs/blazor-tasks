@@ -16,7 +16,7 @@ internal static class EndpointExtensions
 
 	internal static WebApplication UseMyEndpoints(this WebApplication app)
 	{
-		app.UseFastEndpoints(o => o.Errors.UseProblemDetails());
+		app.UseFastEndpoints(static o => o.Errors.UseProblemDetails());
 		return app;
 	}
 }

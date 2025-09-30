@@ -11,8 +11,8 @@ internal static partial class ExceptionHandlerExtensions
 {
 	internal static WebApplication UseMyExceptionHandler(this WebApplication app)
 	{
-		app.UseExceptionHandler(errorApp =>
-			errorApp.Run(async ctx =>
+		app.UseExceptionHandler(static errorApp =>
+			errorApp.Run(static async ctx =>
 			{
 				var logger = ctx.RequestServices.GetRequiredService<ILogger<Program>>();
 				logger.LogUnexpectedError(ctx.Features.Get<IExceptionHandlerFeature>()?.Error);
