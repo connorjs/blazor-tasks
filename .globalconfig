@@ -16,9 +16,16 @@ dotnet_diagnostic.IDE0007.severity = error
 dotnet_diagnostic.IDE0008.severity = none
 
 ## Allow expression and block bodies for local functions
+dotnet_diagnostic.IDE0022.severity = none
 dotnet_diagnostic.IDE0061.severity = none
 
 ## Use file-scoped namespaces
 csharp_style_namespace_declarations = file_scoped:error
 dotnet_diagnostic.IDE0160.severity = none
 dotnet_diagnostic.IDE0161.severity = error
+
+# Prefer static functions (C# 9+)
+csharp_prefer_static_anonymous_function = true
+dotnet_diagnostic.IDE0320.severity = error
+csharp_prefer_static_local_function = true
+dotnet_diagnostic.IDE0062.severity = error

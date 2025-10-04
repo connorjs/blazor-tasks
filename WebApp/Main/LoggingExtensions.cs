@@ -15,7 +15,7 @@ internal static class LoggingExtensions
 		builder
 			.Logging.ClearProviders()
 			.AddConsole()
-			.Configure(o =>
+			.Configure(static o =>
 			{
 				o.ActivityTrackingOptions =
 					ActivityTrackingOptions.SpanId
@@ -24,7 +24,7 @@ internal static class LoggingExtensions
 					| ActivityTrackingOptions.Tags
 					| ActivityTrackingOptions.Baggage;
 			});
-		builder.Services.AddHttpLogging(o =>
+		builder.Services.AddHttpLogging(static o =>
 		{
 			o.LoggingFields =
 				HttpLoggingFields.Duration

@@ -1,9 +1,8 @@
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using FastEndpoints.Swagger;
 using JetBrains.Annotations;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi;
 using Scalar.AspNetCore;
 
 namespace Connorjs.BlazorTasks.WebApp.Main;
@@ -11,39 +10,70 @@ namespace Connorjs.BlazorTasks.WebApp.Main;
 internal static class OpenApiExtensions
 {
 	[UsedImplicitly]
-	private sealed record OpenApiConfig(string DocumentName, OpenApiInfo Info);
+	private sealed record OpenApiConfig(
+		string DocumentName,
+		string Title,
+		string Description,
+		string Version
+	);
 
 	internal static T AddMyOpenApi<T>(this T builder)
 		where T : IHostApplicationBuilder
 	{
-		var openApiConfig = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
-		builder.Services.AddOpenApi(
-			openApiConfig.DocumentName,
-			o =>
-				o.AddDocumentTransformer(
-						(document, _, _) =>
-						{
-							document.Info = openApiConfig.Info;
-							return Task.CompletedTask;
-						}
-					)
-					.AddScalarTransformers()
-		);
+		var config = builder.Configuration.GetRequired<OpenApiConfig>("OpenApi");
+		builder.Services.SwaggerDocument(o =>
+		{
+			o.DocumentSettings = d =>
+			{
+				d.DocumentName = config.DocumentName;
+				d.Title = config.Title;
+				d.Description = config.Description;
+				d.Version = config.Version;
+				d.MarkNonNullablePropsAsRequired();
+			};
+			o.ExcludeNonFastEndpoints = true;
+			o.RemoveEmptyRequestSchema = true;
+			o.ShortSchemaNames = true;
+		});
 		return builder;
 	}
 
 	internal static WebApplication UseMyOpenApi(this WebApplication app)
 	{
-		// ReSharper disable once InvertIf -- I find this if more readable given same return
 		if (app.Environment.IsDevelopment())
 		{
 			var openApiConfig = app.Configuration.GetRequired<OpenApiConfig>("OpenApi");
-			app.MapOpenApi().CacheOutput();
+			app.UseSwaggerGen(
+				s =>
+				{
+					s.Path = "/openapi/{documentName}.json";
+				},
+				u =>
+				{
+					u.ShowOperationIDs();
+				}
+			);
 			app.MapScalarApiReference(
 				"/docs",
 				o =>
-					o.AddDocument(openApiConfig.DocumentName, "Blazor Tasks BFF | @connorjs")
-						.WithDarkMode(false)
+				{
+					o.AddDocument(openApiConfig.DocumentName, openApiConfig.Title);
+					o.DarkMode = false;
+					o.DocumentDownloadType = DocumentDownloadType.None;
+					o.EnabledClients =
+					[
+						ScalarClient.Curl,
+						ScalarClient.Httpie,
+						ScalarClient.Python3,
+						ScalarClient.RestSharp,
+						ScalarClient.Fetch,
+					];
+					o.Metadata = new Dictionary<string, string>()
+					{
+						{ "title", openApiConfig.Title },
+						{ "description", openApiConfig.Description },
+					};
+				}
 			);
 		}
 
