@@ -1,13 +1,14 @@
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Connorjs.BlazorTasks.WebApp.HelloWorld;
 
-/// <remarks>
-/// Example “Hello, world!” operation.
-/// </remarks>
-internal sealed class SayHello : Endpoint<HelloRequest, HelloResponse>
+/// <summary>/hi</summary>
+/// <remarks>Example “Hello, world!” operation.</remarks>
+internal sealed class SayHello : Endpoint<HelloRequest, Results<Ok<HelloResponse>, ProblemDetails>>
 {
 	public override void Configure()
 	{
@@ -15,9 +16,19 @@ internal sealed class SayHello : Endpoint<HelloRequest, HelloResponse>
 		AllowAnonymous();
 	}
 
-	public override async Task HandleAsync(HelloRequest req, CancellationToken ct)
+	public override async Task<Results<Ok<HelloResponse>, ProblemDetails>> ExecuteAsync(
+		HelloRequest req,
+		CancellationToken ct
+	)
 	{
-		await Send.OkAsync(new HelloResponse() { Message = $"Hello, {req.Name ?? "world"}!" }, ct);
+		await Task.CompletedTask; // Example endpoint, but keep `Task` return.
+		if (req?.Name == "err")
+		{
+			AddError(r => r.Name, "Hello, error!");
+			return new ProblemDetails(ValidationFailures);
+		}
+
+		return TypedResults.Ok(new HelloResponse() { Message = $"Hello, {req?.Name ?? "world"}!" });
 	}
 }
 
