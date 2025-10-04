@@ -4,6 +4,9 @@ using FastEndpoints;
 
 namespace Connorjs.BlazorTasks.WebApp.HelloWorld;
 
+/// <remarks>
+/// Example “Hello, world!” operation.
+/// </remarks>
 internal sealed class SayHello : Endpoint<HelloRequest, HelloResponse>
 {
 	public override void Configure()
